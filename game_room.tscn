@@ -1,0 +1,189 @@
+[gd_scene load_steps=13 format=3 uid="uid://efyngsm8ffxe"]
+
+[ext_resource type="Script" path="res://WorldBounds.gd" id="1_3s2eo"]
+[ext_resource type="Texture2D" uid="uid://outjf1p6ape4" path="res://Blue_Nebula_08-512x512.png" id="1_bwb86"]
+[ext_resource type="Script" path="res://MouseController.gd" id="1_eko6e"]
+[ext_resource type="Script" path="res://MovingBackground.gd" id="2_qx8q2"]
+[ext_resource type="PackedScene" uid="uid://5dmp157kpk51" path="res://ball.tscn" id="3_70ax0"]
+[ext_resource type="Texture2D" uid="uid://dvtfu5f0sunwt" path="res://Blue_Nebula_07-512x512.png" id="3_kt34r"]
+[ext_resource type="Texture2D" uid="uid://b0p2qkdylpoga" path="res://Blue_Nebula_06-512x512.png" id="4_c5oue"]
+[ext_resource type="Script" path="res://HudLayer.gd" id="6_l4a5f"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_tllo8"]
+normal = Vector2(0, 1)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_5i2e7"]
+normal = Vector2(1, 0)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_n0et3"]
+normal = Vector2(-1, 0)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_wsjye"]
+
+[node name="GameRoom" type="Node2D"]
+
+[node name="WorldBounds" type="StaticBody2D" parent="."]
+script = ExtResource("1_3s2eo")
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="WorldBounds"]
+script = ExtResource("2_qx8q2")
+scroll_speed = Vector2(20, 10)
+
+[node name="BackgroundLayer" type="ParallaxLayer" parent="WorldBounds/ParallaxBackground"]
+unique_name_in_owner = true
+motion_scale = Vector2(0, 0)
+motion_mirroring = Vector2(512, 512)
+
+[node name="BackgroundSprite" type="Sprite2D" parent="WorldBounds/ParallaxBackground/BackgroundLayer"]
+unique_name_in_owner = true
+texture_repeat = 2
+texture = ExtResource("3_kt34r")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 1152, 648)
+
+[node name="MidgroundLayer" type="ParallaxLayer" parent="WorldBounds/ParallaxBackground"]
+unique_name_in_owner = true
+motion_scale = Vector2(0.5, 0.25)
+motion_mirroring = Vector2(512, 512)
+
+[node name="MidgroundSprite" type="Sprite2D" parent="WorldBounds/ParallaxBackground/MidgroundLayer"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.705882)
+texture_repeat = 2
+texture = ExtResource("1_bwb86")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 1152, 648)
+
+[node name="ForegroundLayer" type="ParallaxLayer" parent="WorldBounds/ParallaxBackground"]
+unique_name_in_owner = true
+motion_mirroring = Vector2(512, 512)
+
+[node name="ForegroundSprite" type="Sprite2D" parent="WorldBounds/ParallaxBackground/ForegroundLayer"]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.313726)
+texture_repeat = 2
+texture = ExtResource("4_c5oue")
+centered = false
+region_enabled = true
+region_rect = Rect2(0, 0, 1152, 648)
+
+[node name="TopBorder" type="CollisionShape2D" parent="WorldBounds"]
+unique_name_in_owner = true
+position = Vector2(576, 0)
+shape = SubResource("WorldBoundaryShape2D_tllo8")
+
+[node name="LeftBorder" type="CollisionShape2D" parent="WorldBounds"]
+unique_name_in_owner = true
+position = Vector2(0, 324)
+shape = SubResource("WorldBoundaryShape2D_5i2e7")
+
+[node name="RightBorder" type="CollisionShape2D" parent="WorldBounds"]
+unique_name_in_owner = true
+position = Vector2(1152, 324)
+shape = SubResource("WorldBoundaryShape2D_n0et3")
+
+[node name="BottomBorder" type="CollisionShape2D" parent="WorldBounds"]
+unique_name_in_owner = true
+position = Vector2(576, 648)
+shape = SubResource("WorldBoundaryShape2D_wsjye")
+
+[node name="MouseController" type="Node2D" parent="."]
+script = ExtResource("1_eko6e")
+ball_scene = ExtResource("3_70ax0")
+
+[node name="HudLayer" type="CanvasLayer" parent="."]
+script = ExtResource("6_l4a5f")
+
+[node name="OuterBox" type="BoxContainer" parent="HudLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="ControlPanel" type="PanelContainer" parent="HudLayer/OuterBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="HudLayer/OuterBox/ControlPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="GridContainer" type="GridContainer" parent="HudLayer/OuterBox/ControlPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 16
+columns = 2
+
+[node name="BallScaleLabel" type="Label" parent="HudLayer/OuterBox/ControlPanel/MarginContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Scale (1.0)"
+horizontal_alignment = 2
+
+[node name="BallScaleSlider" type="HSlider" parent="HudLayer/OuterBox/ControlPanel/MarginContainer/GridContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_force_pass_scroll_events = false
+max_value = 2.0
+step = 0.1
+value = 1.0
+tick_count = 5
+ticks_on_borders = true
+
+[node name="HealthFactorLabel" type="Label" parent="HudLayer/OuterBox/ControlPanel/MarginContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Health Factor (10)"
+horizontal_alignment = 2
+
+[node name="HealthFactorSlider" type="HSlider" parent="HudLayer/OuterBox/ControlPanel/MarginContainer/GridContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 1.0
+value = 10.0
+tick_count = 5
+ticks_on_borders = true
+
+[node name="TopBarBox" type="BoxContainer" parent="HudLayer/OuterBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+size_flags_stretch_ratio = 3.0
+
+[node name="ControlPanelCollapseButton" type="Button" parent="HudLayer/OuterBox/TopBarBox"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 32
+text = ">"
+
+[node name="MarginContainer" type="MarginContainer" parent="HudLayer/OuterBox/TopBarBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="BallCountLabel" type="Label" parent="HudLayer/OuterBox/TopBarBox/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Ball Count: 0"
+
+[connection signal="value_changed" from="HudLayer/OuterBox/ControlPanel/MarginContainer/GridContainer/BallScaleSlider" to="HudLayer" method="_on_ball_scale_slider_value_changed"]
+[connection signal="value_changed" from="HudLayer/OuterBox/ControlPanel/MarginContainer/GridContainer/HealthFactorSlider" to="HudLayer" method="_on_health_factor_slider_value_changed"]
+[connection signal="pressed" from="HudLayer/OuterBox/TopBarBox/ControlPanelCollapseButton" to="HudLayer" method="_on_control_panel_collapse_button_pressed"]

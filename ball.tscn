@@ -1,0 +1,53 @@
+[gd_scene load_steps=6 format=3 uid="uid://5dmp157kpk51"]
+
+[ext_resource type="Script" path="res://ball.gd" id="1_mq0lt"]
+[ext_resource type="SystemFont" uid="uid://d1i6ufgwb6qji" path="res://default_font.tres" id="2_tqhco"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_5pjvp"]
+friction = 0.0
+rough = true
+bounce = 1.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_mdr4t"]
+radius = 10.0
+height = 20.0
+radial_segments = 16
+rings = 16
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0srm1"]
+
+[node name="Ball" type="RigidBody2D"]
+z_index = 1
+physics_material_override = SubResource("PhysicsMaterial_5pjvp")
+gravity_scale = 0.0
+max_contacts_reported = 1
+contact_monitor = true
+script = ExtResource("1_mq0lt")
+debug_font = ExtResource("2_tqhco")
+
+[node name="OutlineMesh" type="MeshInstance2D" parent="."]
+self_modulate = Color(0.490196, 0.490196, 0.490196, 1)
+z_index = -1
+mesh = SubResource("SphereMesh_mdr4t")
+
+[node name="CenterMesh" type="MeshInstance2D" parent="OutlineMesh"]
+scale = Vector2(0.8, 0.8)
+mesh = SubResource("SphereMesh_mdr4t")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_0srm1")
+
+[node name="HealthLabel" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = -33.0
+offset_top = -28.0
+offset_right = 186.0
+offset_bottom = 150.0
+scale = Vector2(0.3, 0.3)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 20
+theme_override_font_sizes/font_size = 100
+text = "100"
+horizontal_alignment = 1
+vertical_alignment = 1
